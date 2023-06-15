@@ -13,6 +13,7 @@ public struct RGBAShader: MemberAttributeMacro, ConformanceMacro {
         SwiftSyntax.TypeSyntax,
         SwiftSyntax.GenericWhereClauseSyntax?
     )] where Declaration : SwiftSyntax.DeclGroupSyntax, Context : SwiftSyntaxMacros.MacroExpansionContext {
+        
         [(SwiftSyntax.TypeSyntax.init(stringLiteral: "RGBAProtocol"), nil)]
     }
    
@@ -22,19 +23,17 @@ public struct RGBAShader: MemberAttributeMacro, ConformanceMacro {
         providingAttributesFor member: MemberDeclaration,
         in context: Context
     ) throws -> [SwiftSyntax.AttributeSyntax] where Declaration : SwiftSyntax.DeclGroupSyntax, MemberDeclaration : SwiftSyntax.DeclSyntaxProtocol, Context : SwiftSyntaxMacros.MacroExpansionContext {
-        if let variable = member as? VariableDeclSyntax {
-            return [.init(stringLiteral: "//XYZ:\(variable.description)")]
+        
+//        let allVariableNames: [String] = declaration.memberBlock.members.compactMap({ $0.decl.as(VariableDeclSyntax.self)?.bindings.first?.pattern.as(IdentifierPatternSyntax.self)?.identifier.text })
+        
+        if let variableName = member.as(VariableDeclSyntax.self)?.bindings.first?.pattern.as(IdentifierPatternSyntax.self)?.identifier.text {
+            
+//            let isRoot: Bool = allVariableNames.contains(variableName)
+            
+            if variableName == "code" { return [] }
+            return [.init(stringLiteral: "@RGBAVariable(\"\(variableName)\")")]
         }
-        if let item = member as? SwiftSyntax.MemberDeclListItemSyntax {
-            if item.decl.is(VariableDeclSyntax.self) {
-                return [.init(stringLiteral: "//YES\(item.description)")]
-            }
-        }
-        return [
-            .init(stringLiteral: "//...")
-        ]
-//        return [
-//            .init(stringLiteral: "@RGBAWrapper")
-//        ]
+        
+        return []
     }
 }

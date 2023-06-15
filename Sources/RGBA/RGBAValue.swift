@@ -1,13 +1,16 @@
 import CoreGraphics
 
 public protocol RGBAValue {
-    var code: String { get }
+    var type: RGBAType { get }
+    var raw: String { get }
 }
 
 extension Double: RGBAValue {
-    public var code: String { "\(self)" }
+    public var type: RGBAType { .float }
+    public var raw: String { "\(self)" }
 }
 
 extension CGFloat: RGBAValue {
-    public var code: String { "\(self)" }
+    public var type: RGBAType { .float }
+    public var raw: String { "\(self)" }
 }

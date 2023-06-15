@@ -8,16 +8,22 @@ struct TestShader {
     var b = 2.0
     
     var code: RGBACode {
-        .code("x")
+        $a + $b
     }
 }
 
 final class RGBATests: XCTestCase {
     
     func testAdd() throws {
-        XCTAssertEqual(TestShader().code.raw, "a + b")
-        
-//        let proxy: any Proxy = a + b
-//        XCTAssertEqual(proxy.code, "1.0 + 2.0")
+        let shader: RGBAProtocol = TestShader()
+        XCTAssertEqual(
+            shader.code.block,
+            """
+            float a = 1.0;
+            float b = 2.0;
+            return a + b;
+            """
+        )
     }
 }
+

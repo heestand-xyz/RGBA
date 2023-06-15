@@ -16,23 +16,36 @@ let package = Package(
             targets: ["RGBA"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-syntax", from: "509.0.0-swift-5.9-DEVELOPMENT-SNAPSHOT-2023-04-25-b"),
+        .package(
+            url: "https://github.com/apple/swift-syntax",
+            from: "509.0.0-swift-5.9-DEVELOPMENT-SNAPSHOT-2023-04-25-b"
+        ),
+        .package(
+            url: "https://github.com/apple/swift-collections",
+            from: "1.0.0"
+        ),
     ],
     targets: [
         .target(
-            name: "RGBA"),
+            name: "RGBA",
+            dependencies: [
+                "RGBAMacros",
+                .product(name: "Collections", package: "swift-collections"),
+            ]),
         .testTarget(
             name: "RGBATests",
             dependencies: [
                 "RGBA",
-                "RGBAMacro",
-                .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
+                .product(name: "SwiftSyntaxMacrosTestSupport",
+                         package: "swift-syntax"),
             ]),
         .macro(
-            name: "RGBAMacro",
+            name: "RGBAMacros",
             dependencies: [
-                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
-                .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
+                .product(name: "SwiftSyntaxMacros",
+                         package: "swift-syntax"),
+                .product(name: "SwiftCompilerPlugin",
+                         package: "swift-syntax"),
             ]),
     ]
 )
